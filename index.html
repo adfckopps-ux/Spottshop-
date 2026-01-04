@@ -3,118 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPOTTSHOP</title>
+    <title>SPOTTSHOP | The Baggy Authority</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; margin: 0; }
-        
-        /* Nav */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px; position: fixed; width: 100%; top: 0; background: #000; z-index: 100; }
-        
-        /* Hamburger Button (3 Lines Only) */
-        .ham { cursor: pointer; display: flex; flex-direction: column; gap: 5px; width: 25px; }
-        .ham div { width: 100%; height: 2px; background: #fff; }
-
-        .logo { font-weight: bold; font-size: 20px; text-transform: uppercase; }
-
-        /* Sidebar */
-        #sidebar { 
-            position: fixed; left: -300px; top: 0; width: 250px; height: 100%; 
-            background: #000; border-right: 1px solid #222; padding: 80px 20px; 
-            transition: 0.3s; z-index: 90; 
+        /* CSS VARIABLES & RESET */
+        :root {
+            --bg: #0d0d0d;
+            --text: #ffffff;
+            --accent: #e0fb2c; 
+            --gray: #1a1a1a;
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        #sidebar.open { left: 0; }
-        
-        .cat { cursor: pointer; display: block; margin-bottom: 20px; font-weight: bold; text-transform: uppercase; }
-        .sub-menu { display: none; padding-left: 15px; margin-bottom: 20px; }
-        .sub-menu.show { display: block; }
-        .sub-link { display: block; color: #777; text-decoration: none; margin-bottom: 10px; font-size: 14px; }
-        
-        .coming-soon-text { color: #444; font-size: 14px; margin-top: -15px; margin-bottom: 20px; display: block; }
 
-        /* Content */
-        .content { padding: 100px 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .card { margin-bottom: 30px; }
-        .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: #111; }
-        .blur { filter: blur(10px); opacity: 0.5; }
-        .name { font-weight: bold; margin-top: 10px; text-transform: uppercase; }
-        .price { color: #777; }
-        
-        button { background: #fff; color: #000; border: none; width: 100%; padding: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Helvetica Neue', sans-serif;
+        }
 
-        .section { display: none; }
-        .section.active { display: block; }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* GRAIN OVERLAY (The Aesthetic Secret) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* NAVIGATION */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.5;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(13,13,13,0.2), var(--bg)),
+                        url('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1887&auto=format&fit=crop') center/cover;
+            padding: 0 5%;
+        }
+
+        .hero h1 {
+            font-size: clamp(4rem, 15vw, 12rem);
+            line-height: 0.8;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .hero h1 span {
+            display: block;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--text);
+        }
+
+        .hero p {
+            max-width: 500px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--text);
+            color: var(--bg);
+            text-decoration: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            border: 1px solid var(--text);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--text);
+            transform: scale(1.05);
+        }
+
+        /* PRODUCT SECTION */
+        .shop-container {
+            padding: 10rem 5%;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--gray);
+            padding-bottom: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 4rem;
+        }
+
+        .product-card {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .img-container {
+            width: 100%;
+            aspect-ratio: 4/5;
+            background-color: var(--gray);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: var(--transition);
+            filter: grayscale(100%);
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .product-info h3 {
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .price {
+            font-family: serif;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        .tag {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--accent);
+            color: black;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--gray);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            opacity: 0.5;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 5rem; }
+        }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="ham" onclick="document.getElementById('sidebar').classList.toggle('open')">
-        <div></div><div></div><div></div>
-    </div>
-    <div class="logo">SPOTTSHOP</div>
-    <div onclick="alert('Cart is empty')" style="cursor:pointer">BAG [0]</div>
-</nav>
+    <nav>
+        <div class="logo">Spottshop</div>
+        <ul class="nav-links">
+            <li><a href="#shop">Collection</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Cart</a></li>
+        </ul>
+    </nav>
 
-<div id="sidebar">
-    <div class="cat" onclick="document.getElementById('jeans-sub').classList.toggle('show')">Baggy Jeans</div>
-    <div class="sub-menu" id="jeans-sub">
-        <a href="#" class="sub-link" onclick="show('in-stock')">In Stock</a>
-        <a href="#" class="sub-link" onclick="show('new-drop')">New Drop</a>
-    </div>
+    <section class="hero">
+        <p>Volume 01 / Essentials</p>
+        <h1>ULTRA <span>BAGGIES</span></h1>
+        <a href="#shop" class="btn">Shop the Drop</a>
+    </section>
 
-    <div class="cat">Jackets</div>
-    <span class="coming-soon-text">coming soon...</span>
-
-    <div class="cat">Hoodies</div>
-    <span class="coming-soon-text">coming soon...</span>
-</div>
-
-<div class="content">
-    <div id="in-stock" class="section active">
-        <h1>In Stock</h1>
+    <main class="shop-container" id="shop">
+        <h2 class="section-title">New Arrivals / '26</h2>
+        
         <div class="grid">
-            <div class="card">
-                <img src="https://i.postimg.cc/L5TfwT9N/IMG-20260104-153608-444.jpg">
-                <div class="name">Graphite Wide Leg</div>
-                <div class="price">229 DH</div>
-                <button>Order</button>
+            <div class="product-card">
+                <span class="tag">Limited</span>
+                <div class="img-container">
+                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=1000&auto=format&fit=crop');"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Heavy Denim <br>Wide Leg</h3>
+                    <span class="price">$120.00</span>
+                </div>
             </div>
-            <div class="card">
-                <img src="https://i.postimg.cc/zB985ZBw/IMG-20260104-154451-843.jpg">
-                <div class="name">Essential Stone</div>
-                <div class="price">229 DH</div>
-                <button>Order</button>
+
+            <div class="product-card">
+                <div class="img-container">
+                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1604176354204-926873ff34b1?q=80&w=1000&auto=format&fit=crop');"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Oversized <br>Carpenter Pant</h3>
+                    <span class="price">$145.00</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="img-container">
+                    <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1565084888279-aca607ecce0c?q=80&w=1000&auto=format&fit=crop');"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Raw Indigo <br>Relaxed Fit</h3>
+                    <span class="price">$110.00</span>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div id="new-drop" class="section">
-        <h1>New Drop</h1>
-        <div class="grid">
-            <div class="card">
-                <img src="https://i.postimg.cc/FFdH6GRY/IMG-20260104-154401-304.jpg">
-                <div class="name">Acid Wash Cargo</div>
-                <div class="price">229 DH</div>
-                <button>Order</button>
-            </div>
-            <div class="card">
-                <img src="https://i.postimg.cc/Qd0DCWtv/IMG-20260104-154454-515.jpg">
-                <div class="name">Pitch Black Denim</div>
-                <div class="price">229 DH</div>
-                <button>Order</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function show(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById('sidebar').classList.remove('open');
-    }
-</script>
+    <footer>
+        &copy; 2026 SPOTTSHOP STUDIOS. ALL RIGHTS RESERVED.
+    </footer>
 
 </body>
 </html>
