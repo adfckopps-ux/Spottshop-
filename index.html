@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPOTT SHOP | OFFICIAL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syne:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080808;
+            --fg: #ffffff;
+            --accent: #e0e0e0;
+            --ease: cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+            background-size: 40px 40px; /* Subtle "Spott" pattern */
+            color: var(--fg);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Nav & Logo */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            letter-spacing: -2px;
+            font-size: 1.8rem;
+            text-transform: lowercase;
+        }
+
+        .logo span { color: #555; }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-btn div {
+            width: 25px;
+            height: 2px;
+            background: var(--fg);
+            transition: 0.4s var(--ease);
+        }
+
+        /* Fullscreen Navigation */
+        #nav-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 8, 8, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1500;
+            transform: translateY(-100%);
+            transition: transform 0.8s var(--ease);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10%;
+        }
+
+        #nav-overlay.open { transform: translateY(0); }
+
+        .cat-item {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--fg);
+            line-height: 0.9;
+            margin: 10px 0;
+            transition: 0.5s var(--ease);
+            display: block;
+            border-bottom: 1px solid transparent;
+        }
+
+        .cat-item:hover {
+            color: #555;
+            padding-left: 30px;
+        }
+
+        /* Submenu Style */
+        .sub-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s var(--ease);
+            display: flex;
+            gap: 40px;
+            margin-left: 10px;
+        }
+
+        .sub-box.active {
+            max-height: 100px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sub-box a {
+            color: #888;
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .sub-box a:hover { color: var(--fg); }
+
+        .coming-soon {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            opacity: 0.3;
+            font-weight: 300;
+            margin-left: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 15vw;
+            letter-spacing: -5vw;
+            margin-bottom: -2vw;
+        }
+
+        .hero p {
+            font-weight: 300;
+            letter-spacing: 10px;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            font-size: 1rem;
+            letter-spacing: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">spott<span>shop</span></div>
+        <button class="menu-btn" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+        </button>
+    </nav>
+
+    <div id="nav-overlay">
+        <div class="close-btn" onclick="toggleMenu()">CLOSE</div>
+        
+        <div class="cat-group">
+            <a href="#" class="cat-item" onclick="toggleSub()">Baggy Jeans</a>
+            <div id="jeans-sub" class="sub-box">
+                <a href="#">In Stock</a>
+                <a href="#">New Drop</a>
+            </div>
+        </div>
+
+        <div class="cat-item" style="opacity: 0.2;">
+            Layers <span class="coming-soon">COMING SOON</span>
+        </div>
+
+        <a href="#" class="cat-item">Contact</a>
+    </div>
+
+    <section class="hero">
+        <p>Curated Streetwear</p>
+        <h1>SPOTT</h1>
+    </section>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('nav-overlay');
+            menu.classList.toggle('open');
+            // Change hamburger to X
+            const lines = document.querySelectorAll('.menu-btn div');
+            if(menu.classList.contains('open')) {
+                lines[0].style.transform = "rotate(45deg) translate(7px, 7px)";
+                lines[1].style.transform = "rotate(-45deg) translate(0px, 0px)";
+            } else {
+                lines[0].style.transform = "none";
+                lines[1].style.transform = "none";
+                document.getElementById('jeans-sub').classList.remove('active');
+            }
+        }
+
+        function toggleSub() {
+            document.getElementById('jeans-sub').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
