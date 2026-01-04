@@ -3,269 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPOTTSHOP | Official</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>SPOTTSHOP</title>
     <style>
-        :root {
-            --bg: #000000;
-            --text: #ffffff;
-            --dim: #777777;
-            --hype: #ff0000;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-        /* Navigation Bar */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px 5%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-        }
-
-        /* The Three Lines (Hamburger) */
-        .menu-btn {
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            z-index: 2001;
-        }
-        .line { width: 25px; height: 1px; background: white; transition: 0.3s; }
-
-        .logo { font-weight: 900; font-size: 1.4rem; letter-spacing: -1px; text-transform: uppercase; cursor: pointer; }
-        .cart-btn { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; }
-
-        /* Sidebar Navigation */
-        #main-sidebar {
-            position: fixed;
-            left: -100%;
-            top: 0;
-            width: 320px;
-            height: 100vh;
-            background: #080808;
-            padding: 100px 40px;
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 2000;
-            border-right: 1px solid #1a1a1a;
-        }
-        #main-sidebar.active { left: 0; }
-
-        .nav-item { margin-bottom: 25px; }
-        .nav-link { 
-            font-size: 1.1rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            color: white;
-            display: block;
-        }
+        body { background: #000; color: #fff; font-family: sans-serif; margin: 0; }
         
-        /* Submenu Styling */
-        .submenu { 
-            height: 0; 
-            overflow: hidden; 
-            transition: 0.3s ease; 
-            padding-left: 15px;
-            margin-top: 10px;
+        /* Nav */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px; position: fixed; width: 100%; top: 0; background: #000; z-index: 100; }
+        
+        /* Hamburger Button (3 Lines Only) */
+        .ham { cursor: pointer; display: flex; flex-direction: column; gap: 5px; width: 25px; }
+        .ham div { width: 100%; height: 2px; background: #fff; }
+
+        .logo { font-weight: bold; font-size: 20px; text-transform: uppercase; }
+
+        /* Sidebar */
+        #sidebar { 
+            position: fixed; left: -300px; top: 0; width: 250px; height: 100%; 
+            background: #000; border-right: 1px solid #222; padding: 80px 20px; 
+            transition: 0.3s; z-index: 90; 
         }
-        .submenu.open { height: auto; margin-bottom: 20px; }
-        .submenu a { 
-            display: block; 
-            color: var(--dim); 
-            text-decoration: none; 
-            font-size: 0.8rem; 
-            margin-bottom: 12px; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .submenu a:hover { color: white; }
+        #sidebar.open { left: 0; }
+        
+        .cat { cursor: pointer; display: block; margin-bottom: 20px; font-weight: bold; text-transform: uppercase; }
+        .sub-menu { display: none; padding-left: 15px; margin-bottom: 20px; }
+        .sub-menu.show { display: block; }
+        .sub-link { display: block; color: #777; text-decoration: none; margin-bottom: 10px; font-size: 14px; }
+        
+        .coming-soon-text { color: #444; font-size: 14px; margin-top: -15px; margin-bottom: 20px; display: block; }
 
-        /* Main Content */
-        .content { padding: 120px 5% 60px; max-width: 1400px; margin: 0 auto; }
-        h2 { font-weight: 900; font-size: 2.2rem; text-transform: uppercase; margin-bottom: 40px; }
+        /* Content */
+        .content { padding: 100px 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { margin-bottom: 30px; }
+        .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: #111; }
+        .blur { filter: blur(10px); opacity: 0.5; }
+        .name { font-weight: bold; margin-top: 10px; text-transform: uppercase; }
+        .price { color: #777; }
+        
+        button { background: #fff; color: #000; border: none; width: 100%; padding: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 40px;
-        }
-
-        .card { position: relative; }
-        .img-box { aspect-ratio: 3/4; overflow: hidden; background: #111; position: relative; }
-        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
-        .card:hover img { transform: scale(1.05); }
-
-        .price-tag { font-size: 0.9rem; font-weight: 300; color: var(--dim); margin-top: 5px; }
-        .item-name { font-weight: 700; text-transform: uppercase; font-size: 0.95rem; margin-top: 15px; }
-
-        .add-cart-btn {
-            width: 100%; border: 1px solid #333; background: transparent; color: white;
-            padding: 12px; margin-top: 15px; font-weight: 900; font-size: 10px;
-            text-transform: uppercase; cursor: pointer;
-        }
-        .add-cart-btn:hover { background: white; color: black; }
-
-        /* Coming Soon Blur */
-        .blur-card img { filter: blur(20px) grayscale(100%); opacity: 0.3; }
-        .status-badge { position: absolute; top: 15px; left: 15px; background: white; color: black; font-weight: 900; font-size: 9px; padding: 4px 8px; text-transform: uppercase; }
-
-        /* Cart & Overlay */
-        #cart-drawer {
-            position: fixed; right: -100%; top: 0; width: 350px; height: 100%;
-            background: #0a0a0a; z-index: 3000; padding: 40px; transition: 0.4s;
-            border-left: 1px solid #222;
-        }
-        #cart-drawer.open { right: 0; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 1500; }
-
-        @media (max-width: 768px) { #main-sidebar { width: 100%; } }
+        .section { display: none; }
+        .section.active { display: block; }
     </style>
 </head>
 <body>
 
-<div class="overlay" id="overlay" onclick="closeAll()"></div>
-
 <nav>
-    <div class="menu-btn" onclick="toggleMenu()">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
+    <div class="ham" onclick="document.getElementById('sidebar').classList.toggle('open')">
+        <div></div><div></div><div></div>
     </div>
-    <div class="logo" onclick="location.reload()">SPOTTSHOP</div>
-    <div class="cart-btn" onclick="toggleCart()">Bag [<span id="bag-count">0</span>]</div>
+    <div class="logo">SPOTTSHOP</div>
+    <div onclick="alert('Cart is empty')" style="cursor:pointer">BAG [0]</div>
 </nav>
 
-<div id="main-sidebar">
-    <div class="nav-item">
-        <span class="nav-link" onclick="toggleSubmenu('jeans-sub')">Baggy Jeans</span>
-        <div class="submenu" id="jeans-sub">
-            <a href="#" onclick="showSection('in-stock')">In Stock</a>
-            <a href="#" onclick="showSection('new-drop')">New Drop</a>
-        </div>
+<div id="sidebar">
+    <div class="cat" onclick="document.getElementById('jeans-sub').classList.toggle('show')">Baggy Jeans</div>
+    <div class="sub-menu" id="jeans-sub">
+        <a href="#" class="sub-link" onclick="show('in-stock')">In Stock</a>
+        <a href="#" class="sub-link" onclick="show('new-drop')">New Drop</a>
     </div>
-    <div class="nav-item">
-        <span class="nav-link" onclick="showSection('outerwear')">Jackets & Hoodies</span>
-    </div>
+
+    <div class="cat">Jackets</div>
+    <span class="coming-soon-text">coming soon...</span>
+
+    <div class="cat">Hoodies</div>
+    <span class="coming-soon-text">coming soon...</span>
 </div>
 
-<main class="content">
-    
-    <section id="in-stock" class="section">
-        <h2>In Stock</h2>
+<div class="content">
+    <div id="in-stock" class="section active">
+        <h1>In Stock</h1>
         <div class="grid">
             <div class="card">
-                <div class="img-box"><img src="https://i.postimg.cc/L5TfwT9N/IMG-20260104-153608-444.jpg"></div>
-                <div class="item-name">Graphite Wide Leg</div>
-                <div class="price-tag">229 DH</div>
-                <button class="add-cart-btn" onclick="addToBag('Graphite Wide Leg', 229)">Add to Bag</button>
+                <img src="https://i.postimg.cc/L5TfwT9N/IMG-20260104-153608-444.jpg">
+                <div class="name">Graphite Wide Leg</div>
+                <div class="price">229 DH</div>
+                <button>Order</button>
             </div>
             <div class="card">
-                <div class="img-box"><img src="https://i.postimg.cc/zB985ZBw/IMG-20260104-154451-843.jpg"></div>
-                <div class="item-name">Essential Stone</div>
-                <div class="price-tag">229 DH</div>
-                <button class="add-cart-btn" onclick="addToBag('Essential Stone', 229)">Add to Bag</button>
+                <img src="https://i.postimg.cc/zB985ZBw/IMG-20260104-154451-843.jpg">
+                <div class="name">Essential Stone</div>
+                <div class="price">229 DH</div>
+                <button>Order</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section id="new-drop" class="section" style="display:none;">
-        <h2>New Drop</h2>
+    <div id="new-drop" class="section">
+        <h1>New Drop</h1>
         <div class="grid">
             <div class="card">
-                <div class="status-badge">New Arrival</div>
-                <div class="img-box"><img src="https://i.postimg.cc/FFdH6GRY/IMG-20260104-154401-304.jpg"></div>
-                <div class="item-name">Acid Wash Cargo</div>
-                <div class="price-tag">229 DH</div>
-                <button class="add-cart-btn" onclick="addToBag('Acid Wash Cargo', 229)">Add to Bag</button>
+                <img src="https://i.postimg.cc/FFdH6GRY/IMG-20260104-154401-304.jpg">
+                <div class="name">Acid Wash Cargo</div>
+                <div class="price">229 DH</div>
+                <button>Order</button>
+            </div>
+            <div class="card">
+                <img src="https://i.postimg.cc/Qd0DCWtv/IMG-20260104-154454-515.jpg">
+                <div class="name">Pitch Black Denim</div>
+                <div class="price">229 DH</div>
+                <button>Order</button>
             </div>
         </div>
-    </section>
-
-    <section id="outerwear" class="section" style="display:none;">
-        <h2>Outerwear</h2>
-        <div class="grid">
-            <div class="card blur-card">
-                <div class="status-badge" style="background:var(--hype); color:white">Coming Soon</div>
-                <div class="img-box"><img src="https://i.postimg.cc/L5TfwT9N/IMG-20260104-153608-444.jpg"></div>
-                <div class="item-name" style="color:var(--dim)">Preview Hoodie 01</div>
-                <div class="price-tag">--- DH</div>
-            </div>
-        </div>
-    </section>
-</main>
-
-<div id="cart-drawer">
-    <h3 style="text-transform:uppercase; margin-bottom:30px; letter-spacing:2px">Your Bag</h3>
-    <div id="cart-content">Bag is empty.</div>
-    <div id="cart-footer" style="display:none; margin-top:40px; border-top:1px solid #222; padding-top:20px">
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:900">
-            <span>TOTAL</span>
-            <span id="bag-total">0 DH</span>
-        </div>
-        <a id="wa-link" href="#" target="_blank" style="display:block; background:white; color:black; text-align:center; padding:18px; font-weight:900; text-decoration:none; text-transform:uppercase">Order via WhatsApp</a>
     </div>
 </div>
 
 <script>
-    let bag = [];
-
-    function toggleMenu() {
-        document.getElementById('main-sidebar').classList.toggle('active');
-        document.getElementById('overlay').style.display = 
-            document.getElementById('main-sidebar').classList.contains('active') ? 'block' : 'none';
-    }
-
-    function toggleSubmenu(id) {
-        document.getElementById(id).classList.toggle('open');
-    }
-
-    function showSection(id) {
-        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
-        closeAll();
-    }
-
-    function toggleCart() {
-        document.getElementById('cart-drawer').classList.toggle('open');
-        document.getElementById('overlay').style.display = 
-            document.getElementById('cart-drawer').classList.contains('open') ? 'block' : 'none';
-    }
-
-    function closeAll() {
-        document.getElementById('main-sidebar').classList.remove('active');
-        document.getElementById('cart-drawer').classList.remove('open');
-        document.getElementById('overlay').style.display = 'none';
-    }
-
-    function addToBag(name, price) {
-        bag.push({name, price});
-        updateBagUI();
-        toggleCart();
-    }
-
-    function updateBagUI() {
-        document.getElementById('bag-count').innerText = bag.length;
-        const content = document.getElementById('cart-content');
-        const footer = document.getElementById('cart-footer');
-        const totalEl = document.getElementById('bag-total');
-        const link = document.getElementById('wa-link');
-
-        if(bag.length > 0) {
-            content.innerHTML = bag.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom:15px"><span>${i.name}</span><span>${i.price} DH</span></div>`).join('');
-            let total = bag.reduce((sum, item) => sum + item.price, 0);
-            totalEl.innerText = total + " DH";
-            footer.style.display = 'block';
-            let msg = `Hello Spottshop! I want to order:\n${bag.map(i => "• " + i.name).join('\n')}\nTotal: ${total} DH`;
-            link.href = `https://wa.me/212775029974?text=${encodeURIComponent(msg)}`;
-        }
+    function show(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('sidebar').classList.remove('open');
     }
 </script>
 
